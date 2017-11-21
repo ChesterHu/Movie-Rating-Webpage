@@ -49,4 +49,15 @@
 		     '<table>'.
 			 '</div>';
 	}
+
+	  // Function to convert data into valid format
+	  // It will strip unnecessary characters (extra space, tab, newline) from the user input data
+	  // remove the backslashes (\) from the user input, and convert html special characters exploits
+	function valid_input($data)
+	{
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
+	}
 ?>

@@ -15,17 +15,66 @@
 	<!-- include navBar.html -->
 	<script src="jquery.js"></script>
 	<script>$(function(){$("#navBar").load("navBar.html");});</script>
+	<style>
+	.error {color: #FF0000;}
+	</style>
 </head>
+<!-- Get input -->
+<?php
+include "utilities.php";
+
+  // Declare variables
+$title = $year = $rating = $company = "";
+$genre_input = array();
+
+  // Declare error messages:
+$titleError = $companyError = $genreError = "";
+
+  // Check if it's non empty and assign value to variables
+  // Check customer title input
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	if (empty($_POST["title"]))
+		$titleError = "Title is required!";
+	else
+		$title = valid_input($_POST["title"]);
+
+	  // Check customer year input
+	if (empty($_POST["company"]))
+		$companyError = "Company name is required!";
+	else
+		$year = valid_input($_POST["company"]);
+
+	  // Check movie genres
+	if (empty($_POST["genres"]))
+		$genreError = "At least one genre should be chosen!";
+}
+/*
+$vars = explode(" ", "title year rating company");
+foreach ($vars as $var)
+	echo $_POST[$var]. "<br>";
+if (isset($_POST['genres']))
+	foreach ($_POST['genres'] as $i)
+		echo $i . "<br>";
+else
+	echo "";
+ */
+?>
+
 <body>
 <!-- Navigation bar on the top -->
 <div id="navBar"></div>
 <!-- Form for movie data input -->
 <div class="container">
-	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+	<!-- Error display if empty input for required fields -->
+	<p><span class="error">* required field </span></p>
+	<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 		
 		<!-- Text input for movie's title-->
 		<div class="form-group">
-			<label for="title">Title:</label>	
+			<label for="title">Title
+				<span class="error">* <?php echo $titleError; ?></span>
+			</label>
 			<input type="text" class="form-control" name="title" id="title">
 		</div>
 		
@@ -54,25 +103,32 @@
 		
 		<!-- Text input for movie's production company -->
 		<div class="group-format">
-			<label for="company">Production Company:</label>
+			<label for="company">Production Company
+				<span class="error">* <?php echo $companyError; ?></span>
+			</label>
 			<input class="form-control" name="company" id="company">
 		</div>
 		<br>
 
 		<!-- Check box for movie genre -->
 		<div class="form-group">
-			<label>Genres:</label>
+			<label>Genres
+				<span class="error">*</span>
+			</label>
 			<?php
 				  // All possible movie genre
-				$genres = explode(",", "Action,Adult,Adventure,Animation,Comedy,Crime,Documentary,Drama,Family,Fantasy,Horror,Musical,Mystery,Romance,Sci-Fi,Short,Thriller,War,Western");
+				$genresTable = explode(",", "Action,Adult,Adventure,Animation,Comedy,Crime,Documentary,Drama,Family,Fantasy,Horror,Musical,Mystery,Romance,Sci-Fi,Short,Thriller,War,Western");
 					// Store selected genre in an array
-				foreach($genres as $genre)
+				foreach($genresTable as $g)
 				{
 					echo "<label class='checkbox-inline'>";
-					echo "<input type='checkbox' name='genre_input[]' value='" . $genre;
-					echo "'>" . $genre . "</input></label>";
+					echo "<input type='checkbox' name='genres[]' value='" . $g;
+					echo "'>" . $g . "</input></label>";
 				}
 			?>
+			<label>
+				<span class="error"><?php echo $genreError; ?></span>
+			</label>
 		</div>
 		<br>
 		
@@ -81,16 +137,5 @@
 	</form>
 </div>
 
-<!-- Test -->
-<?php
-$vars = explode(" ", "title year rating company");
-foreach ($vars as $var)
-	echo $_POST[$var]. "<br>";
-if (isset($_POST['genre_input']))
-	foreach ($_POST['genre_input'] as $i)
-		echo $i . "<br>";
-else
-	echo "";
-?>
 </body>
 </html>
