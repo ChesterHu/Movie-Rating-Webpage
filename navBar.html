@@ -1,0 +1,42 @@
+<!-- This file is a navbar html file for movie rating project -->
+<!-- needs support of bootstrap 3.3.7 -->
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<!-- Navbar head and home link -->
+		<div class="navbar-header">
+			<a class="navbar-brand" href="idx.php">
+			<span class="glyphicon glyphicon-home"></span>
+			</a>
+		</div>
+		<!-- Navbar navigation links/dropdown buttons (unordered list) -->
+		<ul class="nav navbar-nav">
+			<!-- List for search -->
+			<li>
+				<a href="searchActor.php"><span class="glyphicon glyphicon-search"></span> Search</a>
+			</li>
+			<!-- Dropdown list for add -->
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span class="glyphicon glyphicon-plus-sign"></span>
+					Add
+					<span class="caret"></span>
+				</a>
+				<!-- dropdown menu for adding actor/director, movie, comments to movies, actor to movie relation, director to movie relation-->
+				<ul class="dropdown-menu">
+					<li>
+						<a href="addActorDirector.php"><span class="glyphicon glyphicon-user"></span> Actor/Director</a>
+					</li>
+					<li>
+						<a href="addMovie.php"><span class="glyphicon glyphicon-film"></span> Movie</a>
+					</li>
+					<li>
+						<a href="addMovieActorRelation.php"><span class="glyphicon glyphicon-link"></span> Actor to Movie</a>
+					</li>	
+					<li>
+						<a href="addMovieDirectorRelation.php"><span class="glyphicon glyphicon-link"></span> Director to Movie</a>
+					</li>	
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
