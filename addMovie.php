@@ -43,11 +43,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	if (empty($_POST["company"]))
 		$companyError = "Company name is required!";
 	else
-		$year = valid_input($_POST["company"]);
+		$company = valid_input($_POST["company"]);
 
 	  // Check movie genres
 	if (empty($_POST["genres"]))
 		$genreError = "At least one genre should be chosen!";
+	else
+		$genres = $_POST["genres"];
+	
+	$year = $_POST["year"];
+	$rating = $_POST["rating"];	
 }
 /*
 $vars = explode(" ", "title year rating company");

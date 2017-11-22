@@ -15,11 +15,27 @@
 	<!-- include navBar.html -->
 	<script src="jquery.js"></script>
 	<script>$(function(){$("#navBar").load("navBar.html");});</script>
+	<style>
+	.error {color : #FF0000;}
+	</style>
 </head>
 <!-- connect to database -->
 <?php
 $db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
 mysqli_select_db($db_connection, "TEST");
+?>
+<!-- Input validation -->
+<?php
+  // Variable and error message
+$role = $roleError = "";
+include "utilities.php";
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	if (empty($_POST["role"]))
+		$roleError = "Role description required!";
+	else
+		$role = valid_input($_POST["role"]);
+}
 ?>
 
 <body>
@@ -58,8 +74,10 @@ mysqli_select_db($db_connection, "TEST");
 
 		<!-- Text area for role discription -->
 		<div class="form-group">
-			<label for="role">Actor role in Movie:</label>
-			<textarea class="form-control" rows="5" name="role" id="actor"></textarea>
+			<label for="role">Actor role in Movie
+				<span class="error">* <?php echo $roleError;?></span>
+			</label>
+			<textarea class="form-control" rows="5" name="role" id="role"></textarea>
 		</div>
 
 		<!-- Input button -->
@@ -68,12 +86,15 @@ mysqli_select_db($db_connection, "TEST");
 	</form>
 </div>
 
+
 <!-- Test -->
 <?php
+/*
 // out put the id of movie and actor
 $vars = explode(" ", "movie actor role");
 foreach ($vars as $var)
 	echo $_POST[$var] . "</br>";
+ */
 ?>
 </body>
 </html>
