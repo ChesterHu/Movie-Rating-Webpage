@@ -26,6 +26,7 @@ include "utilities.php";
   // Delcare input and error variables
 $identity = $lastName = $firstName = $gender = $dob = $dod = "";
 $identityError = $lastNameError = $firstNameError = $genderError = $dobError = $dodError = "";
+$insertResult = "";
 // Check non-empty input
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -55,20 +56,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		}
 		else
 		{
-			  // Check the input format of dob and dod
-			$dt_dob = DateTime::createFromFormat("Y-m-d", $dob);
-			if ($dt_dob === false || array_sum($dt->getLastErrors()))
+			  // Check the input format of dob
+			$dt_dob = DateTime::createFromFormat("Y/m/d", $_POST["dob"]);
+			if ($dt_dob === false || array_sum($dt_dob->getLastErrors()))
 			{
-				$dobError = "Wrong date format!";
+				$dobError = "Please use the format of YYYY/MM/DD";
 				break;
 			}
 			$dob = valid_input($_POST["dob"]);
+		}
+
+		  // Check input format of dod if it's not empty.
+		if (!empty($_POST["dod"]))
+		{
+			$dt_dod = DateTime::createFromFormat("Y/m/d", $_POST["dod"]);
+			if ($dt_dod === false || array_sum($dt_dod->getLastErrors()))  // array_sum() is to prevent php do month shifting (i.e jan 32 -> Feb 1)
+			{
+				$dodError = "Please use the format of YYYY/MM/DD";
+				break;
+			}
 		}
 		
 		  // All input is valid if not break
 		$identity = $_POST["identity"];
 		$gender = $_POST["gender"];
 		$dod = $_POST["dod"];
+		  // Connect to the database
+		$db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
+		mysqli_select_db($db_connection, "TEST");
+		  // Get Id for new person
+		$personID = getId("Person", $db_connection) + 1;
+		  // update maxPersonID
+		mysqli_query($db_connection, "UPDATE MaxPersonID SET id = id + 1");
+		$vars = array($personID, "'$lastName'", "'$firstName'", "'$gender'", "'$dob'", "'$dod'");
+		  // Insert date into database
+		if (insertTuple("Actor", $vars, $db_connection))
+		{
+			$insertResult = "Insertion succeeded";
+			  // update maxPersonID
+		}
+		else
+			$insertResult = "<span class = 'error'> Insertion failed! </span>";
 	} while (false);
 }
 ?>
@@ -106,40 +134,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		
 		<!-- Radio button for female/male -->
 		<div class="radio-inline">
-			<label><input type="radio" name="gender" value="female" checked> Female
+			<label><input type="radio" name="gender" value="female" checked> Female</label>
 		</div>
 		<div class="radio-inline">
-			<label><input type="radio" name="gender" value="male"> Male
+			<label><input type="radio" name="gender" value="male"> Male</label>
 		</div><br>
 		<div class="form-group">
 			<label for="dob">Date of birth
-			<span class="error">* <?php echo $dobError; ?></span>
+				<span class="error">* <?php echo $dobError; ?></span>
 			</label>
 			<input type="text" class="form-control" placeholder="YYYY/MM/DD" name="dob" id="dob">
 		</div>
 		<div class="form-group">
-			<label for="dod">Date of death</label>
+			<label for="dod">Date of death
+				<span class="error"><?php echo $dodError; ?></span>
+			</label>
 			<input type="text" class="form-control" placeholder="YYYY/MM/DD" name="dod" id="dod">
 			(Leave blank if alive)
 		</div>
 		<br>
 		<!-- Input button -->
 		<button type="submit" class="btn btn-warning">Submit</button>
-		</div>
+		<br>
+		<!-- Result of Insertion -->
+		<?php echo $insertResult; ?>
 	</form>
 </div>
 </body>
-
-<!-- Test -->
-<?php
-echo $_POST["identity"] . "<br>";
-echo $_POST["lastName"] . "<br>";
-echo $_POST["firstName"] . "<br>";
-echo $_POST["gender"] . "<br>";
-echo $_POST["dob"] . "<br>";
-echo $_POST["dod"] . "<br>";
-$db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
-mysqli_select_db($db_connection, "TEST");
-echo getId("Person", $db_connection);
-?>
 </html>

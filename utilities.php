@@ -69,4 +69,14 @@
 		$data = htmlspecialchars($data);
 		return $data;
 	}
+	  // Funtion to insert new tuple into database, return true if the database insert successfully
+	function insertTuple($dbName, $vars, $db_connection)
+	{
+		$query = "INSERT INTO $dbName VALUES( ";
+		foreach($vars as $val)
+			$query .= "$val ,";
+		  // replace last comma by left parenthese
+		$query = substr($query, 0, -1) . ")";
+		return mysqli_query($db_connection, $query);
+	}
 ?>
