@@ -29,25 +29,47 @@ $identityError = $lastNameError = $firstNameError = $genderError = $dobError = $
 // Check non-empty input
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-	  // First name input should be non-emtpy
-	if (empty($_POST["firstName"]))
-		$firstNameError = "First name is required!";
-	else
-		$firstName = valid_input($_POST["firstName"]);
-	  // Last name input should be non-empty
-	if (empty($_POST["lastName"]))
-		$lastNameError = "Last name is required!";
-	else
-		$lastName = valid_input($_POST["lastName"]);
-	  // Date of birth input should be non-empty
-	if (empty($_POST["dob"]))
-		$dobError = "Date of birth is required!";
-	else
-		$dob = valid_input($_POST["dob"]);
-
-	$identity = $_POST["identity"];
-	$gender = $_POST["gender"];
-	$dod = $_POST["dod"];
+	do
+	{
+		  // First name input should be non-emtpy
+		if (empty($_POST["firstName"]))
+		{
+			$firstNameError = "First name is required!";
+			break;
+		}
+		else
+			$firstName = valid_input($_POST["firstName"]);
+		  // Last name input should be non-empty
+		if (empty($_POST["lastName"]))
+		{
+			$lastNameError = "Last name is required!";
+			break;
+		}
+		else
+			$lastName = valid_input($_POST["lastName"]);
+		  // Date of birth input should be non-empty
+		if (empty($_POST["dob"]))
+		{
+			$dobError = "Date of birth is required!";
+			break;
+		}
+		else
+		{
+			  // Check the input format of dob and dod
+			$dt_dob = DateTime::createFromFormat("Y-m-d", $dob);
+			if ($dt_dob === false || array_sum($dt->getLastErrors()))
+			{
+				$dobError = "Wrong date format!";
+				break;
+			}
+			$dob = valid_input($_POST["dob"]);
+		}
+		
+		  // All input is valid if not break
+		$identity = $_POST["identity"];
+		$gender = $_POST["gender"];
+		$dod = $_POST["dod"];
+	} while (false);
 }
 ?>
 
@@ -62,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		
 		<!-- Radio button for Actor/Director -->
 		<div class="radio-inline">
-			<label><input type="radio" name="identity" value="Actor">Actor</label>
+			<label><input type="radio" name="identity" value="Actor" checked>Actor/Actress</label>
 		</div>
 		<div class="radio-inline">
 			<label><input type="radio" name="identity" value="Director">Director</label>
@@ -84,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		
 		<!-- Radio button for female/male -->
 		<div class="radio-inline">
-			<label><input type="radio" name="gender" value="female"> Female
+			<label><input type="radio" name="gender" value="female" checked> Female
 		</div>
 		<div class="radio-inline">
 			<label><input type="radio" name="gender" value="male"> Male

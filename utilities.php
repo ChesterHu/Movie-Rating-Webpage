@@ -49,10 +49,10 @@
 		     '<table>'.
 			 '</div>';
 	}
-	// Function to get movie or person id, it will do query in MaxPersonID/MaxMovieID
-	// INPUT: 
-	// identity: string, "Movie"/"Person"
-	// db_connection: object returned from mysqli_connection, the connection to the data base
+	  // Function to get movie or person id, it will do query in MaxPersonID/MaxMovieID
+	  // INPUT: 
+	  // identity: string, "Movie"/"Person"
+	  // db_connection: object returned from mysqli_connection, the connection to the data base
 	function getId($identity, $db_connection)
 	{
 		$query = "SELECT id FROM Max" . $identity . "ID";
