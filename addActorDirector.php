@@ -86,14 +86,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		mysqli_select_db($db_connection, "TEST");
 		  // Get Id for new person
 		$personID = getId("Person", $db_connection) + 1;
-		  // update maxPersonID
-		mysqli_query($db_connection, "UPDATE MaxPersonID SET id = id + 1");
 		$vars = array($personID, "'$lastName'", "'$firstName'", "'$gender'", "'$dob'", "'$dod'");
 		  // Insert date into database
 		if (insertTuple("Actor", $vars, $db_connection))
 		{
 			$insertResult = "Insertion succeeded";
 			  // update maxPersonID
+			mysqli_query($db_connection, "UPDATE MaxPersonID SET id = id + 1");
 		}
 		else
 			$insertResult = "<span class = 'error'> Insertion failed! </span>";
