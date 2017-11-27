@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 			mysqli_query($db_connection, "UPDATE MaxPersonID SET id = id + 1");
 		}
 		else
-			$insertResult = "<div class = 'alert alert-warning'> Failed! </div>";
+			$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
 	} while (false);
 }
 ?>
