@@ -34,27 +34,60 @@ $titleError = $companyError = $genreError = "";
   // Check customer title input
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-	if (empty($_POST["title"]))
-		$titleError = "Title is required!";
-	else
-		$title = valid_input($_POST["title"]);
+	do
+	{
+		if (empty($_POST["title"]))
+		{
+			$titleError = "Title is required!";
+			break;
+		}
+		else
+			$title = valid_input($_POST["title"]);
 
-	  // Check customer year input
-	if (empty($_POST["company"]))
-		$companyError = "Company name is required!";
-	else
-		$company = valid_input($_POST["company"]);
+		  // Check customer year input
+		if (empty($_POST["company"]))
+		{
+			$companyError = "Company name is required!";
+			break;
+		}
+		else
+			$company = valid_input($_POST["company"]);
 
-	  // Check movie genres
-	if (empty($_POST["genres"]))
-		$genreError = "At least one genre should be chosen!";
-	else
-		$genres = $_POST["genres"];
-	
-	$year = $_POST["year"];
-	$rating = $_POST["rating"];	
+		  // Check movie genres
+		if (empty($_POST["genres"]))
+		{
+			$genreError = "At least one genre should be chosen!";
+			break;
+		}
+		else
+			$genres = $_POST["genres"];
+		$year = $_POST["year"];
+		$rating = $_POST["rating"];
+		
+		  // Connect to the database;
+		$db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
+		mysqli_select_db($db_connection, "TEST");
+		  // Get ID for new movie
+		$movieID = getId("Movie", $db_connection) + 1;
+		  // Create insert array
+		$vars = array($movieID, "'$title'", $year, "'$rating'", "'$company'");
+		  // Begin inserting data into database
+		if (insertTuple("Movie", $vars, $db_connection))
+		{
+			  // Further insert movie genres
+			foreach($genres as $g)
+				insertTuple("MovieGenre", array($movieID, "'$g'"), $db_connection);
+			$insertResult = "<div class = 'alert alert-success'>Success!</div>";
+			  // update maxPersonID
+			mysqli_query($db_connection, "UPDATE MaxMovieID SET id = id + 1");
+		}
+		else
+		{
+			$insertResult = "<div class = 'alert alert-warning'> Failed! </div>";
+		}
+	} while (false);
 }
-/*
+/* Test
 $vars = explode(" ", "title year rating company");
 foreach ($vars as $var)
 	echo $_POST[$var]. "<br>";
@@ -139,6 +172,9 @@ else
 		
 		<!-- Input button -->
 		<button type="submit" class="btn btn-warning">Submit</button>
+		<br>
+		<!-- Result of Insertion -->
+		<?php echo $insertResult; ?>
 	</form>
 </div>
 
