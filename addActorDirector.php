@@ -90,12 +90,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		  // Insert date into database
 		if (insertTuple("Actor", $vars, $db_connection))
 		{
-			$insertResult = "Insertion succeeded";
+			$insertResult = "<div class = 'alert alert-success'>Success!</div>";
 			  // update maxPersonID
 			mysqli_query($db_connection, "UPDATE MaxPersonID SET id = id + 1");
 		}
 		else
-			$insertResult = "<span class = 'error'> Insertion failed! </span>";
+			$insertResult = "<div class = 'alert alert-warning'> Failed! </div>";
 	} while (false);
 }
 ?>
