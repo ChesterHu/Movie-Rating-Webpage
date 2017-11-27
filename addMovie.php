@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		}
 		else
 		{
-			$insertResult = "<div class = 'alert alert-warning'> Failed! </div>";
+			$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
 		}
 	} while (false);
 }
