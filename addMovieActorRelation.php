@@ -31,10 +31,25 @@ $role = $roleError = "";
 include "utilities.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-	if (empty($_POST["role"]))
-		$roleError = "Role description required!";
-	else
-		$role = valid_input($_POST["role"]);
+	do
+	{
+		if (empty($_POST["role"]))
+		{
+			$roleError = "Role description required!";
+			break;
+		}
+		else
+			$role = valid_input($_POST["role"]);
+
+		$movieID = $_POST["movie"];
+		$actorID = $_POST["actor"];
+
+		 // insert movie actor relation
+		if (mysqli_query($db_connection, "INSERT INTO MovieActor (mid, aid, role) VALUES ($movieID, $actorID, '$role') ON DUPLICATE KEY UPDATE role = '$role'"))
+			$insertResult = "<div class = 'alert alert-success'>Success!</div>";
+		else
+			$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
+	} while (false);
 }
 ?>
 
@@ -82,6 +97,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
 		<!-- Input button -->
 		<button type="submit" class="btn btn-warning">Submit</button>
+		<br>
+		<!-- Insert Result -->
+		<?php echo $insertResult; ?>
 		</div>
 	</form>
 </div>
