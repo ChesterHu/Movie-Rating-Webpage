@@ -44,7 +44,7 @@ mysqli_select_db($db_connection, "TEST");
 
 		<!-- select list for the actor name -->
 		<div class="form-group">
-			<label for="director">Select actor</label>
+			<label for="director">Select director</label>
 			<select calss="form-control" name="director" id="director">
 			<!-- display all actor names in the select list, let value equal to the movie id -->
 			<?php
