@@ -21,7 +21,23 @@
 $db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
 mysqli_select_db($db_connection, "TEST");
 ?>
-
+<!-- Input Validation -->
+<?php
+  // Non, input are all select list
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	$directorID = $_POST["director"];
+	$movieID = $_POST["movie"];
+	if (mysqli_query($db_connection, "INSERT INTO MovieDirector (mid, did) VALUES ($movieID, $directorID)"))
+	{
+		$insertResult = "<div class = 'alert alert-success'>Success!</div>";
+	}
+	else
+	{
+		$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
+	}
+}
+?>
 <body>
 <!-- Navigation bar on the top  -->
 <div id="navBar"></div>
@@ -58,16 +74,18 @@ mysqli_select_db($db_connection, "TEST");
 		
 		<!-- Input button -->
 		<button type="submit" class="btn btn-warning">Submit</button>
-		</div>
+		<?php echo $insertResult; ?>
 	</form>
 </div>
 
 <!-- Test -->
 <?php
+/*
 // out put the id of movie and director
 $vars = explode(" ", "movie director role");
 foreach ($vars as $var)
 	echo $_POST[$var] . "</br>";
+ */
 ?>
 </body>
 </html>
