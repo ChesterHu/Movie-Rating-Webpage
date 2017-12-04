@@ -85,8 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
 		}
-		mysqli_close($db_connection);
 	} while (false);
+	  // close data base connection
+	mysqli_close($db_connection);
 }
 /* Test
 $vars = explode(" ", "title year rating company");

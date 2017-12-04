@@ -97,6 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		else
 			$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
 	} while (false);
+	  // close data base connection
+	mysqli_close($db_connection);
 }
 ?>
 
