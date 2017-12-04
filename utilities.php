@@ -26,23 +26,29 @@
 	  // data: object returned from mysqli_query, is a table returned by mysql SELECT query
 	  // title: string, the title to be printed in above the table
 	  // col_names: array of strings, column names to be printed in the table
-	function printTable($data, $title, $col_names)
+	  // col_start: int, indicate start printing from which column, default is 0
+	function printTable($data, $title, $col_names, $col_start = 0)
 	{
 		echo '<div class = container>'. 
 		     '<h2>'. $title. '</h2>'.
 		     '<table class="table table-bordered">'.
 		     '<thead>'.
 			 '<tr>';
-			 foreach($col_names as $c_name)
-				 echo '<th>' . $c_name . '</th>';
+		for ($i = $col_start; $i < count($col_names); $i++)
+			echo '<th>' . $col_names[$i] . '</th>';
 		echo '</tr>'.
 		     '</thead>'.
 		     '<tbody>';
 		while ($row = mysqli_fetch_row($data))
 		{
 			echo '<tr>';
-			for ($i = 0; $i < count($row); $i++)
-				echo '<td>' . $row[$i] . '</td>';
+			for ($i = $col_start; $i < count($row); $i++)
+			{
+				if ($row[$i] == "")
+					echo '<td>-</td>';
+				else
+					echo '<td>' . $row[$i] . '</td>';
+			}
 			echo '</tr>';
 		}
 		echo '</tbody>'.
