@@ -36,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$insertResult = "<div class = 'alert alert-warning'> Fail! </div>";
 	}
+	  // close data base connection
+	mysqli_close($db_connection);
 }
 ?>
 <body>

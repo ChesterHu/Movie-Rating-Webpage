@@ -51,6 +51,7 @@
 		printTable($movie_tbl, "Matching Movies", array("Titile", "Release year"));
 
 	}
+	  // close data base connection
 	mysqli_close($db_connection);
 ?>
 </div>
