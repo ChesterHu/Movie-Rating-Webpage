@@ -51,7 +51,7 @@
 			echo '</tr>';
 		}
 		echo '</tbody>'.
-		     '<table>'.
+		     '</table>'.
 			 '</div>';
 	}
 	  // Function to get movie or person id, it will do query in MaxPersonID/MaxMovieID
