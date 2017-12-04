@@ -25,7 +25,7 @@
 	  // INPUT:
 	  // data: object returned from mysqli_query, is a table returned by mysql SELECT query
 	  // title: string, the title to be printed in above the table
-	  // col_names: string, column names to be printed in the table
+	  // col_names: array of strings, column names to be printed in the table
 	function printTable($data, $title, $col_names)
 	{
 		echo '<div class = container>'. 
