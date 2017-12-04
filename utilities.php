@@ -34,8 +34,8 @@
 		     '<table class="table table-bordered">'.
 		     '<thead>'.
 			 '<tr>';
-		for ($i = $col_start; $i < count($col_names); $i++)
-			echo '<th>' . $col_names[$i] . '</th>';
+		foreach($col_names as $c)
+			echo '<th>' . $c . '</th>';
 		echo '</tr>'.
 		     '</thead>'.
 		     '<tbody>';
