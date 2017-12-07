@@ -52,7 +52,7 @@
 	}
 	  // close data base connection
 	mysqli_close($db_connection);
-?>
+	?>
 </div>
 </body>
 
