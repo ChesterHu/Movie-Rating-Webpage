@@ -36,9 +36,9 @@ $col_name = array("Last name", "First name", "Gender", "Date of birth", "Date of
 printTable($tbl, "Actor Information:", $col_name);
 
   // print movies that the actor was in
-$tbl = mysqli_query($db_connection, "select role, title, year from Actor, Movie, MovieActor where Actor.id = aid and Movie.id = mid and aid = $actorID order by year desc");
-$col_name = array("Role", "Movie title", "Year");
-printTable($tbl, "Movies the actor was in:", $col_name);
+$tbl = mysqli_query($db_connection, "select title, role, year, Movie.id from Actor, Movie, MovieActor where Actor.id = aid and Movie.id = mid and aid = $actorID order by year desc");
+$col_name = array("Movie title","Role", "Year");
+printTable($tbl, "Movies the actor was in:", $col_name, "showMovie.php");
 
   // close data base connection
 mysqli_close($db_connection);
