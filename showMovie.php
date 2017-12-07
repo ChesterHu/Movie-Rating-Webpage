@@ -36,20 +36,30 @@ $movieTbl = mysqli_query($db_connection, "SELECT title, year, company, rating FR
 $genreTbl = mysqli_query($db_connection, "SELECT genre FROM Movie m, MovieGenre mg WHERE m.id = $movieID AND mg.mid = m.id");
   // get movie's director, might be empty
 $directorTbl = mysqli_query($db_connection, "SELECT CONCAT(first, ' ', last) FROM Director, MovieDirector WHERE mid = $movieID AND id = did");
+  // get movie ratings
+$ratingTbl = mysqli_query($db_connection, "SELECT imdb, rot FROM MovieRating WHERE mid = $movieID");
+  // get actors in the movie
+$movieActorTbl = mysqli_query($db_connection, "SELECT CONCAT(first,' ', last), CONCAT('\"',role,'\"'), sex, dob, dod,  Actor.id from Actor, Movie, MovieActor WHERE Movie.id = $movieID AND Movie.id = mid AND Actor.id = aid order by first asc");
 
-  // fetch variables from movie information table, director table and genre table
+  // close data base connection
+mysqli_close($db_connection);
+
+  // fetch genres
 $genres = "";
 while ($row = mysqli_fetch_row($genreTbl))
-	$genres .= $row[0] . ',';
-$genres = substr($genres, 0, -1);
+	$genres .= $row[0] . ', ';
+$genres = substr($genres, 0, -2);
+  // fetch director name
 $director = mysqli_fetch_row($directorTbl)[0];
+  // fetch movie informations
 $vars = mysqli_fetch_row($movieTbl);
 $title = $vars[0]; $year = $vars[1]; $company = $vars[2]; $rating = $vars[3];
-
+  // fetch movie ratings
+$ratings = mysqli_fetch_row($ratingTbl);
 ?>
 
 
-<!-- Movie information -->
+<!-- Movie information table -->
 <div class='container'>
 	<h2>Movie Information: </h2>
 	<table class='table table-striped'>
@@ -74,17 +84,35 @@ $title = $vars[0]; $year = $vars[1]; $company = $vars[2]; $rating = $vars[3];
 </div>
 
 
+<!-- Actors in this movie table -->
 <?php
 
   // print actor information table
-$movieActorTbl = mysqli_query($db_connection, "SELECT CONCAT(first,' ', last), CONCAT('\"',role,'\"'), sex, dob, dod,  Actor.id from Actor, Movie, MovieActor WHERE Movie.id = $movieID AND Movie.id = mid AND Actor.id = aid order by first asc");
 $col_name = array("Name","Role in the movie", "Gender", "Date of birth", "Date of death");
 printTable($movieActorTbl, "Actors in this movie:", $col_name, "showActor.php");
-  // close data base connection
-mysqli_close($db_connection);
 
 ?>
 
+<!-- Movie ratings table -->
+<div class='container'>
+	<h2>Movie Ratings: </h2>
+	<table class='table table-bordered'>
+		<thead>
+			<tr>
+				<th>IMDb</th>
+				<th>Rotten Tomatoes</th>
+				<th>User Review</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><?php echo empty($ratings) ? '-' : $ratings[0] . '/100'; ?></td>
+				<td><?php echo empty($ratings) ? '-' : $ratings[1] . '/100'; ?></td>
+				<td><?php echo empty($userRating) ? '-' : $userRating . '/10'; ?></td>
+			</tr>
+		</tbody>		
+	</table>
+</div>
 
 </body>
 </html>
