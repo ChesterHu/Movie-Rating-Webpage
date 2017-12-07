@@ -1,6 +1,5 @@
+<!-- Functions used in this project -->
 <?php
-	// Functions used in project 1B
-
 	  // Function to do query_search, it basicly constructs a string in the form of:
 	  //       SELECT print_name FROM db_name WHERE search_col LIKE search_array[0] AND search_col LIKE search_array[1] ...
 	  // INPUT:
@@ -26,11 +25,12 @@
 	  // data: object returned from mysqli_query, is a table returned by mysql SELECT query
 	  // title: string, the title to be printed in above the table
 	  // col_names: array of strings, column names to be printed in the table
-	function printTable($data, $title, $col_names)
+	  // linkPage: string, if not empty tuples will be linked to the given page, and link id will use the last var in $data
+	function printTable($data, $title, $col_names, $linkPage = "")
 	{
 		echo '<div class = container>'. 
 		     '<h2>'. $title. '</h2>'.
-		     '<table class="table table-bordered">'.
+		     '<table class="table table-bordered table-hover table-condensed">'.
 		     '<thead>'.
 			 '<tr>';
 		foreach($col_names as $c)
@@ -41,12 +41,14 @@
 		while ($row = mysqli_fetch_row($data))
 		{
 			echo '<tr>';
-			for ($i = 0; $i < count($row); $i++)
+			for ($i = 0; $i < count($col_names); $i++)
 			{
 				if ($row[$i] == "")
 					echo '<td>-</td>';
-				else
+				else if (empty($linkPage))  // if no link page specified, print var
 					echo '<td>' . $row[$i] . '</td>';
+				else  // if link page specified, print var, link it to linkPage and transfer id via GET method
+					echo '<td>' . '<a href="' .  $linkPage . '?' . 'ID=' . end($row) . '">' . $row[$i] . '</a></td>';	
 			}
 			echo '</tr>';
 		}
@@ -54,6 +56,7 @@
 		     '</table>'.
 			 '</div>';
 	}
+
 	  // Function to get movie or person id, it will do query in MaxPersonID/MaxMovieID
 	  // INPUT: 
 	  // identity: string, "Movie"/"Person"
@@ -74,7 +77,12 @@
 		$data = htmlspecialchars($data);
 		return $data;
 	}
+
 	  // Funtion to insert new tuple into database, return true if the database insert successfully
+	  // INPUT:
+	  // dbName: string, the database name to search
+	  // vars: array of strings, names of variables to search in the database
+	  // db_connection: database connection object, return from mysqli_connect()
 	function insertTuple($dbName, $vars, $db_connection)
 	{
 		$query = "INSERT INTO $dbName VALUES( ";
