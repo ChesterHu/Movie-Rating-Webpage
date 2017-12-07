@@ -26,7 +26,8 @@
 	  // title: string, the title to be printed in above the table
 	  // col_names: array of strings, column names to be printed in the table
 	  // linkPage: string, if not empty tuples will be linked to the given page, and link id will use the last var in $data
-	function printTable($data, $title, $col_names, $linkPage = "")
+	  // linkCol: int, indicates which column should have the link, work only $linkPage specified, default is first column
+	function printTable($data, $title, $col_names, $linkPage = "", $linkCol = 0)
 	{
 		echo '<div class = container>'. 
 		     '<h2>'. $title. '</h2>'.
@@ -45,9 +46,9 @@
 			{
 				if ($row[$i] == "")
 					echo '<td>-</td>';
-				else if (empty($linkPage))  // if no link page specified, print var
+				else if (empty($linkPage) || $i != $linkCol)  // if no link page specified or not the specified link column, print var
 					echo '<td>' . $row[$i] . '</td>';
-				else  // if link page specified, print var, link it to linkPage and transfer id via GET method
+				else  // if link page specified and it's the specified column, print var, link it to linkPage and transfer id via GET method
 					echo '<td>' . '<a href="' .  $linkPage . '?' . 'ID=' . end($row) . '">' . $row[$i] . '</a></td>';	
 			}
 			echo '</tr>';
