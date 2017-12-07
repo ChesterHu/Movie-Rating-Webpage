@@ -27,7 +27,7 @@ $db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
 mysqli_select_db($db_connection, "TEST");
 
   // search actor by actor id
-$actorID = 21;// $_GET["actorID"];
+$actorID = $_GET["ID"];
 
   // print actor information table
 $tbl = mysqli_query($db_connection, "SELECT last, first, sex, dob, dod FROM Actor WHERE id = $actorID");
@@ -36,8 +36,8 @@ $col_name = array("Last name", "First name", "Gender", "Date of birth", "Date of
 printTable($tbl, "Actor Information:", $col_name);
 
   // print movies that the actor was in
-$tbl = mysqli_query($db_connection, "select title, year from Actor, Movie, MovieActor where Actor.id = aid and Movie.id = mid and aid = $actorID");
-$col_name = array("Title", "Year");
+$tbl = mysqli_query($db_connection, "select role, title, year from Actor, Movie, MovieActor where Actor.id = aid and Movie.id = mid and aid = $actorID order by year desc");
+$col_name = array("Role", "Movie title", "Year");
 printTable($tbl, "Movies the actor was in:", $col_name);
 
   // close data base connection

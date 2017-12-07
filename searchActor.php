@@ -45,11 +45,10 @@
 	{
 		include 'utilities.php';
 		$names = explode(" ", $_POST["name"]);
-		$actor_tbl = querySearch($names, "Actor", "concat(last, ' ', first)", "concat(last, ' ', first), dob", $db_connection);
-		$movie_tbl = querySearch($names, "Movie", "title", "title, year", $db_connection);
-		printTable($actor_tbl, "Matching Actors", array("Name", "Date of birth"));
-		printTable($movie_tbl, "Matching Movies", array("Titile", "Release year"));
-
+		$actor_tbl = querySearch($names, "Actor", "concat(last, ' ', first)", "concat(last, ' ', first), dob, id", $db_connection);
+		$movie_tbl = querySearch($names, "Movie", "title", "title, year, id", $db_connection);
+		printTable($actor_tbl, "Matching Actors", array("Name", "Date of birth"), "showActor.php");
+		printTable($movie_tbl, "Matching Movies", array("Titile", "Release year"), "showMovie.php");
 	}
 	  // close data base connection
 	mysqli_close($db_connection);
