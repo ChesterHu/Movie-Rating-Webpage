@@ -86,9 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		mysqli_select_db($db_connection, "TEST");
 		  // Get Id for new person
 		$personID = getId("Person", $db_connection) + 1;
-		$vars = array($personID, "'$lastName'", "'$firstName'", "'$gender'", "'$dob'", "'$dod'");
+		$vars = array("Actor"=>array($personID, "'$lastName'", "'$firstName'", "'$gender'", "'$dob'", "'$dod'"), "Director"=>array($personID, "'$lastName'", "'$firstName'", "'$dob'", "'$dod'"));
 		  // Insert date into database
-		if (insertTuple("Actor", $vars, $db_connection))
+		if (insertTuple($identity, $vars[$identity], $db_connection))
 		{
 			$insertResult = "<div class = 'alert alert-success'>Success!</div>";
 			  // update maxPersonID
