@@ -40,6 +40,9 @@ $directorTbl = mysqli_query($db_connection, "SELECT CONCAT(first, ' ', last) FRO
 $ratingTbl = mysqli_query($db_connection, "SELECT imdb, rot FROM MovieRating WHERE mid = $movieID");
   // get actors in the movie
 $movieActorTbl = mysqli_query($db_connection, "SELECT CONCAT(first,' ', last), CONCAT('\"',role,'\"'), sex, dob, dod,  Actor.id from Actor, Movie, MovieActor WHERE Movie.id = $movieID AND Movie.id = mid AND Actor.id = aid order by first asc");
+  // get user reviews table
+$userReviewTbl = mysqli_query($db_connection, "SELECT name, time, rating, comment FROM Review WHERE mid = $movieID");
+
 
   // close data base connection
 mysqli_close($db_connection);
@@ -93,6 +96,32 @@ printTable($movieActorTbl, "Actors in this movie:", $col_name, "showActor.php");
 
 ?>
 
+
+<!-- Add movie comment -->
+<div class="container">
+<?php
+$linkPage = "addComments.php?ID=$movieID";
+?>
+<p><a href= <?php echo $linkPage; ?>>Add your comment</a></p>
+</div>
+
+<!-- print user reviews -->
+<?php
+$total = 0;
+$cnt = 0;
+while ($row = mysqli_fetch_row($userReviewTbl))
+{
+	echo "<div class='container'>";
+	echo "<p>" . $row[0] . ":</p>";
+	echo "<pre>" . $row[3] . "</pre>";
+	echo "<p align='right'>" . "Rating: " . $row[2] . "/5" . "<br>" . $row[1] . "</p>";
+	echo "</div>";
+	$total += $row[2];
+	$cnt++;
+}
+$userRating = $total / $cnt;
+?>
+
 <!-- Movie ratings table -->
 <div class='container'>
 	<h2>Movie Ratings: </h2>
@@ -108,7 +137,7 @@ printTable($movieActorTbl, "Actors in this movie:", $col_name, "showActor.php");
 			<tr>
 				<td><?php echo empty($ratings) ? '-' : $ratings[0] . '/100'; ?></td>
 				<td><?php echo empty($ratings) ? '-' : $ratings[1] . '/100'; ?></td>
-				<td><?php echo empty($userRating) ? '-' : $userRating . '/10'; ?></td>
+				<td><?php echo empty($userRating) ? '-' : $userRating . '/5'; ?></td>
 			</tr>
 		</tbody>		
 	</table>

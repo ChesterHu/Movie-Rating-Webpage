@@ -25,8 +25,9 @@
 $db_connection = mysqli_connect("localhost", "root", "Shuaibaobao521!");
 mysqli_select_db($db_connection, "TEST");
 
-$movieID = 4759;
-$movieName = "test";
+$movieID = $_GET["ID"];
+$movieName = mysqli_fetch_row(mysqli_query($db_connection, "SELECT title FROM Movie WHERE id=$movieID"))[0];
+
 ?>
 
 <!-- Input validation -->
@@ -56,10 +57,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		}
 
 		$rating = $_POST["rating"];
-		echo $userName;
-		echo $comments;
-		echo $rating;
-		echo date("Y-m-d H:i:s");
+		$time = date("Y-m-d H:i:s");
+
+		$vars = array("'$userName'", "'$time'", $movieID, $rating, "'$comments'");
+		if (insertTuple("Review", $vars, $db_connection))
+		{
+			$insertResult = "<div class = 'alert alert-success'> Thank you for the comments, $userName!</div>";
+		}
+		else
+		{
+			$insertReuslt = "<div class = 'alert alert-warning'> Fail, please try it later</div>";
+		}
+		mysqli_close($db_connection);
 	} while (false);
 }
 
@@ -72,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <div id="navBar"></div>
 
 <div class="container">
-	<h1>Add your comment on "<?php echo $movieName ?></h1>
+	<h1>Add your comment on "<?php echo $movieName ?>"</h1>
 	<p><span class="error">* required field</span><p>
 	<br>
 	<form method="post" action="<?php echo htmlspecialchars($_POST["PHP_SELF"]); ?>">
